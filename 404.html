@@ -9,12 +9,11 @@
     body { display: flex; flex-direction: column; min-height: 100vh; text-align: center; justify-content: center; align-items: center; background: var(--bg-dark); }
     .error-container { max-width: 600px; padding: 2rem; position: relative; z-index: 1; }
     .error-code { font-family: var(--font-heading); font-size: 8rem; font-weight: 900; line-height: 1; color: var(--text-dark); background: linear-gradient(to right, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; }
-    .error-title { font-size: 2rem; font-weight: 700; color: #fff; margin-bottom: 1rem; }
+    .error-title { font-size: 2rem; font-weight: 700; color: #7b5454; margin-bottom: 1rem; }
     .error-desc { font-size: 1.1rem; color: var(--text-light-secondary); margin-bottom: 2rem; }
     .error-bg { position: absolute; inset: 0; background: url('images/hero-2.webp') center/cover; opacity: 0.1; z-index: 0; filter: blur(5px); }
   </style>
 <link rel="stylesheet" href="css/stackly-theme.css?v=1" />
-<base target="_blank">
 </head>
 <body>
 <div class="error-bg"></div>
@@ -23,9 +22,20 @@
   <h1 class="error-title">Looks like you're lost</h1>
   <p class="error-desc">The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>
   <div style="display:flex;gap:1rem;justify-content:center;">
-    <button type="button" onclick="history.back()" class="btn btn-outline" style="color:var(--text-light);border-color:rgba(255,255,255,0.2);">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:0.3rem;"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Go Back
-    </button>
+   
+<button type="button" onclick="history.back()" class="btn btn-outline"
+
+style="background-color: #ADD8E6; color: #123047; border-color: rgba(255,255,255,0.2);"
+
+  <svg width="16" height="16" viewBox="0 0 24 24"
+    fill="none" stroke="currentColor" stroke-width="2">
+    <line x1="19" y1="12" x2="5" y2="12"/>
+    <polyline points="12 19 5 12 12 5"/>
+  </svg>
+
+  Go Back
+</button>
+
     <a href="index.html" class="btn btn-primary">Return to Home <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:0.3rem;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
   </div>
 </div>
