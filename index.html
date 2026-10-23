@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>STACKLY — Hallmark of Luxury Travel</title>
+  <link rel="stylesheet" href="style.css?v=2" />
+  <link rel="stylesheet" href="home.css?v=2" />
+  <meta name="description" content="Discover extraordinary travel experiences with STACKLY. Premium tours, curated destinations, and unforgettable adventures across the globe." />
+</head>
+<body>
+<div id="page-loader" role="status" aria-label="Loading"><div class="loader-premium-content"><div class="loader-spinner"></div><img src="images/logo-stackly.webp" alt="STACKLY" class="loader-logo" /></div></div>
+
+<nav class="navbar glass-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><img src="images/logo-stackly.webp" alt="STACKLY" /></a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="destination.html">Destinations</a></li>
+      <li><a href="experience.html">Experiences</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-login-btn-wrap">
+      <!-- <a href="login.html" class="nav-login-btn">Login</a> -->
+      <a href="login.html" class="nav-cta-btn">Login</a>
+    </div>
+    <button class="nav-hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-menu">
+  <a href="index.html" class="active">Home</a>
+  
+  <a href="about.html">About</a>
+  <a href="destinations.html">Destinations</a>
+  <a href="experiences.html">Experiences</a>
+  <a href="contact.html">Contact</a>
+  <div class="mobile-login-wrap">
+    <a href="login.html" style="display:flex;align-items:center;justify-content:center;padding:0.8rem;border-radius:999px;background:var(--primary);color:#fff;font-weight:700;font-size:0.9rem;">Login to Your Account</a>
+  </div>
+</div>
+
+<!-- ===== HERO CAROUSEL ===== -->
+<section class="hero" id="hero">
+  <div class="hero-slides">
+    <div class="hero-slide active" style="background-image:url('images/hero-1.webp')"></div>
+    <div class="hero-slide" style="background-image:url('images/hero-2.webp')"></div>
+    <div class="hero-slide" style="background-image:url('images/hero-3.webp')"></div>
+  </div>
+  <div class="hero-content container">
+    <h1 class="hero-title">STACKLY<br>Hallmark of <span class="teal-text">Luxury Travel</span></h1>
+    <p class="hero-desc">Discover extraordinary destinations, immerse yourself in authentic cultures, and create unforgettable memories with our expertly curated travel experiences.</p>
+    <div class="hero-btns">
+      <a href="experiences.html" class="btn btn-primary">Our Experiences <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <a href="destinations.html" class="btn btn-outline-white">Plan Your Journey <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></a>
+    </div>
+  </div>
+  <div class="hero-dots">
+    <button class="hero-dot active" aria-label="Slide 1"></button>
+    <button class="hero-dot" aria-label="Slide 2"></button>
+    <button class="hero-dot" aria-label="Slide 3"></button>
+  </div>
+  <div class="hero-partners">
+    <div class="hero-partners-inner container">
+      <span class="hero-partners-label">Trusted By</span>
+      <span class="partner-logo-text">CONDÉ NAST</span>
+      <span class="partner-logo-text">ENSEMBLE</span>
+      <span class="partner-logo-text">VIRTUOSO</span>
+      <span class="partner-logo-text">TRAVEL+LEISURE</span>
+      <span class="partner-logo-text">NAT GEO</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DESTINATION EXPLORER ===== -->
+<section class="dest-explorer" id="destinations">
+  <div class="container">
+    <div class="dest-header">
+      <div class="dest-header-left" data-anim="fade-right">
+        <span class="section-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg> Explore Destinations</span>
+        <h2>Africa</h2>
+        <p>STACKLY crafts bespoke luxury safaris to Africa. Our tailor-made tours will bring you perfect blends, journeying to the most accommodating and scenic destinations with expertly led projects.</p>
+        <p style="margin-top:1rem;font-size:0.9rem;color:var(--text-dark-secondary);">In Africa, you can look forward to enjoying many cultures, spend nights in the surroundings that make a classical escape.</p>
+      </div>
+      <div class="dest-header-right" data-anim="fade-left">
+        <img src="images/dest-africa.webp" alt="African Safari" class="dest-featured-img" />
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-top:0.75rem;">
+          <span style="font-size:0.85rem;font-weight:600;">Select experience type</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dest-filters" data-anim="fade-up">
+      <button class="dest-filter active">All Experiences</button>
+      <button class="dest-filter">Photography</button>
+      <button class="dest-filter">Adventure</button>
+      <button class="dest-filter">Celebration</button>
+      <button class="dest-filter">Gateway</button>
+      <button class="dest-filter">Family</button>
+      <button class="dest-filter">Romantic</button>
+      <button class="dest-filter">Off-shore</button>
+      <button class="dest-filter">Packages</button>
+    </div>
+
+    <div class="dest-grid" data-anim="fade-up" data-delay="100">
+      <div class="dest-card">
+        <img src="images/dest-africa.webp" alt="African Wildlife" loading="lazy" />
+        <div class="dest-card-overlay">
+          <div class="dest-card-title">African Wildlife through the Lens of Namibia</div>
+          <div class="dest-card-meta">Photography • 12 Days</div>
+        </div>
+      </div>
+      <div class="dest-card">
+        <img src="images/dest-bali.webp" alt="Bali Honeymoon" loading="lazy" />
+        <div class="dest-card-overlay">
+          <div class="dest-card-title">Bali Honeymoon Immersed in Nature</div>
+          <div class="dest-card-meta">Romantic • 10 Days</div>
+        </div>
+      </div>
+      <div class="dest-card">
+        <img src="images/dest-santorini.webp" alt="Santorini Golfing" loading="lazy" />
+        <div class="dest-card-overlay">
+          <div class="dest-card-title">Best of South Santorini Golfing Safari</div>
+          <div class="dest-card-meta">Adventure • 8 Days</div>
+        </div>
+      </div>
+      <div class="dest-card">
+        <img src="images/dest-japan.webp" alt="Japan Secrets" loading="lazy" />
+        <div class="dest-card-overlay">
+          <div class="dest-card-title">Japan's Best Kept Cultural Secrets</div>
+          <div class="dest-card-meta">Cultural • 14 Days</div>
+        </div>
+      </div>
+      <div class="dest-card">
+        <img src="images/dest-swiss.webp" alt="Swiss Adventure" loading="lazy" />
+        <div class="dest-card-overlay">
+          <div class="dest-card-title">A World of Wild Adventures in Switzerland</div>
+          <div class="dest-card-meta">Adventure • 9 Days</div>
+        </div>
+      </div>
+      <div class="dest-card">
+        <img src="images/dest-santorini.webp" alt="Santorini Celebration" loading="lazy" />
+        <div class="dest-card-overlay">
+          <div class="dest-card-title">Santorini Anniversary Celebration</div>
+          <div class="dest-card-meta">Celebration • 7 Days</div>
+        </div>
+      </div>
+      <div class="dest-card">
+        <img src="images/dest-maldives.webp" alt="Maldives Gateway" loading="lazy" />
+        <div class="dest-card-overlay">
+          <div class="dest-card-title">Maldives Weekend Gateway</div>
+          <div class="dest-card-meta">Gateway • 3 Days</div>
+        </div>
+      </div>
+      <div class="dest-card">
+        <img src="images/dest-japan.webp" alt="Japan Family" loading="lazy" />
+        <div class="dest-card-overlay">
+          <div class="dest-card-title">Japan Family Exploration</div>
+          <div class="dest-card-meta">Family • 14 Days</div>
+        </div>
+      </div>
+      <div class="dest-card">
+        <img src="images/dest-bali.webp" alt="Bali Off-shore" loading="lazy" />
+        <div class="dest-card-overlay">
+          <div class="dest-card-title">Bali Off-shore Island Hopping</div>
+          <div class="dest-card-meta">Off-shore • 5 Days</div>
+        </div>
+      </div>
+      <div class="dest-card">
+        <img src="images/dest-swiss.webp" alt="Swiss Packages" loading="lazy" />
+        <div class="dest-card-overlay">
+          <div class="dest-card-title">Ultimate Swiss Alps Package</div>
+          <div class="dest-card-meta">Packages • 10 Days</div>
+        </div>
+      </div>
+      <div class="dest-card">
+        <img src="images/dest-africa.webp" alt="Kenya Wildlife" loading="lazy" />
+        <div class="dest-card-overlay">
+          <div class="dest-card-title">Kenya Wildlife Safari</div>
+          <div class="dest-card-meta">Adventure • 8 Days</div>
+        </div>
+      </div>
+      <div class="dest-card">
+        <img src="images/dest-maldives.webp" alt="Maldives Romantic" loading="lazy" />
+        <div class="dest-card-overlay">
+          <div class="dest-card-title">Maldives Romantic Escape</div>
+          <div class="dest-card-meta">Romantic • 5 Days</div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;" data-anim="fade-up">
+      <a href="destinations.html" class="btn btn-outline" style="margin-top:0.5rem;">View More <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WHY STACKLY — STICKY SCROLL CARDS ===== -->
+<section class="why-section" id="why-stackly">
+  <div class="why-sticky">
+    <!-- Card 1: Best Travel Provider -->
+    <div class="why-card active">
+      <div class="why-card-inner">
+        <div class="why-card-image" data-anim="fade-right">
+          <img src="images/hero-1.webp" alt="Best Travel Provider" loading="lazy" />
+        </div>
+        <div class="why-card-content">
+          <div class="why-card-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div class="why-card-number">01</div>
+          <h2 class="why-card-title">Best Travel Provider</h2>
+          <p class="why-card-desc">Your travel investments and adventure are our top priority. We ensure that the entire process of your holiday goes well and is unforgettable. From bespoke itineraries to 24/7 concierge support, every detail is meticulously crafted.</p>
+        </div>
+      </div>
+    </div>
+    <!-- Card 2: Experienced Agents -->
+    <div class="why-card">
+      <div class="why-card-inner">
+        <div class="why-card-image">
+          <img src="images/hero-2.webp" alt="Experienced Agents" loading="lazy" />
+        </div>
+        <div class="why-card-content">
+          <div class="why-card-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <div class="why-card-number">02</div>
+          <h2 class="why-card-title">Experienced Agents</h2>
+          <p class="why-card-desc">Our experience and 15+ years have proven that we can build trust in customers while forging lasting connections. We've been going through it all — providing the best, always finding exactly what to provide for you.</p>
+        </div>
+      </div>
+    </div>
+    <!-- Card 3: Best & Personal Service -->
+    <div class="why-card">
+      <div class="why-card-inner">
+        <div class="why-card-image">
+          <img src="images/hero-3.webp" alt="Personal Service" loading="lazy" />
+        </div>
+        <div class="why-card-content">
+          <div class="why-card-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+          <div class="why-card-number">03</div>
+          <h2 class="why-card-title">Best & Personal Service</h2>
+          <p class="why-card-desc">We know your adventures are more important than any program we can offer. Providing the best service for each individual is our vehicle to perfecting your trip. Every moment is tailored just for you.</p>
+        </div>
+      </div>
+    </div>
+    <!-- Card 4: Free From Problems -->
+    <div class="why-card">
+      <div class="why-card-inner">
+        <div class="why-card-image">
+          <img src="images/dest-maldives.webp" alt="Worry Free Travel" loading="lazy" />
+        </div>
+        <div class="why-card-content">
+          <div class="why-card-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <div class="why-card-number">04</div>
+          <h2 class="why-card-title">Free From Problems</h2>
+          <p class="why-card-desc">Through comprehensive service in all aspects, you don't need to take care of many things. We'll do it for you, so you can enjoy every moment without any problems. Travel insurance, visa assistance, and emergency support included.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Why Progress Dots -->
+<div class="why-progress">
+  <button class="why-progress-dot active" aria-label="Card 1"></button>
+  <button class="why-progress-dot" aria-label="Card 2"></button>
+  <button class="why-progress-dot" aria-label="Card 3"></button>
+  <button class="why-progress-dot" aria-label="Card 4"></button>
+</div>
+
+<!-- ===== DISCOVER YOUR PERFECT PLACE ===== -->
+<section class="discover" id="discover">
+  <div class="container">
+    <div class="discover-header">
+      <div>
+        <h2 data-anim="fade-up">Discover Your<br>Perfect Place</h2>
+      </div>
+      <div data-anim="fade-up" data-delay="100">
+        <p>Are you on the quest to find the ideal spot to spend your time, work, or even call home? Let us assist you in uncovering the place that suits for you.</p>
+        <div style="text-align: right; margin-top: 1rem;">
+          <a href="destinations.html" class="btn btn-dark" style="padding: 0.8rem 2rem;">See Detail</a>
+        </div>
+      </div>
+    </div>
+    <div class="discover-grid">
+      <div class="discover-card" data-anim="fade-up">
+        <div class="discover-card-img"><img src="images/dest-bali.webp" alt="Bali Beach" loading="lazy" /></div>
+        <div class="discover-card-body">
+          <div class="discover-card-top"><span class="discover-card-name">Bali Beach</span><span class="discover-card-spots">123 Spots</span></div>
+          <p class="discover-card-desc">Hawaii boasts some of the world's most breathtaking beaches. With their powdery white sands, crystal-clear turquoise waters, and vibrant coral reefs.</p>
+        </div>
+      </div>
+      <div class="discover-card" data-anim="fade-up" data-delay="100">
+        <div class="discover-card-img"><img src="images/dest-maldives.webp" alt="Maldives Beach" loading="lazy" /></div>
+        <div class="discover-card-body">
+          <div class="discover-card-top"><span class="discover-card-name">Maldives Beach</span><span class="discover-card-spots">120 Spots</span></div>
+          <p class="discover-card-desc">Hawaii boasts some of the world's most breathtaking beaches, with their powdery white sands, crystal-clear turquoise waters, and vibrant marine life.</p>
+        </div>
+      </div>
+      <div class="discover-card" data-anim="fade-up" data-delay="200">
+        <div class="discover-card-img"><img src="images/dest-santorini.webp" alt="Santorini" loading="lazy" /></div>
+        <div class="discover-card-body">
+          <div class="discover-card-top"><span class="discover-card-name">Santorini</span><span class="discover-card-spots">95 Spots</span></div>
+          <p class="discover-card-desc">Maui island is one of the world's most breathtaking beaches, with their powdery white sands, crystal-clear turquoise waters, and vibrant Greek culture.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TRAVEL PACKAGES ===== -->
+<section class="packages" id="packages">
+  <div class="container">
+    <div class="section-header" data-anim="fade-up">
+      <span class="section-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 7V5a4 4 0 00-8 0v2"/></svg> Tour Packages</span>
+      <h2 class="section-title">Curated <span class="teal-text">Travel Packages</span></h2>
+      <p class="section-desc">Choose from our expertly designed packages tailored for every type of traveler. From budget-friendly explorations to ultra-luxury private tours.</p>
+    </div>
+    <div class="packages-grid">
+      <div class="package-card" data-anim="fade-up">
+        <div class="package-name">Explorer</div>
+        <div class="package-price">$999 <span>/ person</span></div>
+        <div class="package-duration">5–7 Day Group Tours</div>
+        <ul class="package-features">
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Guided group tours</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> 3-star hotel accommodation</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Airport transfers included</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Daily breakfast</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Travel insurance</li>
+        </ul>
+        <a href="contact.html" class="btn btn-outline" style="width:100%;">Get Started</a>
+      </div>
+      <div class="package-card featured" data-anim="fade-up" data-delay="100">
+        <div class="package-name">Adventurer</div>
+        <div class="package-price">$2,499 <span>/ person</span></div>
+        <div class="package-duration">10–14 Day Premium Tours</div>
+        <ul class="package-features">
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Private guided tours</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> 4-star boutique hotels</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> All meals included</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Exclusive experiences</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> 24/7 concierge support</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Premium travel insurance</li>
+        </ul>
+        <a href="contact.html" class="btn btn-primary" style="width:100%;">Get Started</a>
+      </div>
+      <div class="package-card" data-anim="fade-up" data-delay="200">
+        <div class="package-name">Luxe Voyager</div>
+        <div class="package-price">$5,999<span>+</span></div>
+        <div class="package-duration">Custom Duration • Private</div>
+        <ul class="package-features">
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Ultra-luxury private tours</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> 5-star resort & villas</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Private jet & yacht options</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Personal butler service</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Michelin dining experiences</li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> VIP everything</li>
+        </ul>
+        <a href="contact.html" class="btn btn-accent" style="width:100%;">Contact Us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TRAVEL JOURNAL / GALLERY ===== -->
+<section class="journal" id="journal">
+  <div class="container">
+    <div class="section-header" data-anim="fade-up">
+      <span class="section-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> Travel Journal</span>
+      <h2 class="section-title">From Our <span class="teal-text">Travel Journal</span></h2>
+      <p class="section-desc">A curated collection of breathtaking moments captured from our journeys around the world.</p>
+    </div>
+    <div class="journal-grid" data-anim="fade-up" data-delay="100">
+      <div class="journal-item" style="height:100%;">
+        <img src="images/hero-1.webp" alt="Tropical Paradise" loading="lazy" />
+        <div class="journal-item-overlay"><div class="journal-item-caption">Tropical Paradise, Maldives</div></div>
+      </div>
+      <div class="journal-item" style="aspect-ratio:4/3;">
+        <img src="images/dest-bali.webp" alt="Bali Terraces" loading="lazy" />
+        <div class="journal-item-overlay"><div class="journal-item-caption">Rice Terraces, Bali</div></div>
+      </div>
+      <div class="journal-item" style="aspect-ratio:4/3;">
+        <img src="images/dest-santorini.webp" alt="Santorini Sunset" loading="lazy" />
+        <div class="journal-item-overlay"><div class="journal-item-caption">Sunset Views, Santorini</div></div>
+      </div>
+      <div class="journal-item" style="aspect-ratio:4/3;">
+        <img src="images/hero-2.webp" alt="Mountain Adventure" loading="lazy" />
+        <div class="journal-item-overlay"><div class="journal-item-caption">Alpine Trails, Switzerland</div></div>
+      </div>
+      <div class="journal-item" style="aspect-ratio:4/3;">
+        <img src="images/dest-japan.webp" alt="Japan Cherry Blossoms" loading="lazy" />
+        <div class="journal-item-overlay"><div class="journal-item-caption">Cherry Blossoms, Japan</div></div>
+      </div>
+      <div class="journal-item" style="aspect-ratio:4/3;">
+        <img src="images/dest-africa.webp" alt="African Safari" loading="lazy" />
+        <div class="journal-item-overlay"><div class="journal-item-caption">Golden Safari, Africa</div></div>
+      </div>
+      <div class="journal-item span-2" style="height:100%;">
+        <img src="images/dest-panoramic.webp" alt="Panoramic Resort" loading="lazy" style="position: absolute; top: 0; left: 0;" />
+        <div class="journal-item-overlay"><div class="journal-item-caption">Overwater Bungalows, Bora Bora</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== NEWSLETTER ===== -->
+<!-- <section class="newsletter">
+  <div class="container">
+    <div class="newsletter-inner" data-anim="fade-up">
+      <h3>Stay <span class="teal-text">Inspired</span></h3>
+      <p>Subscribe to our newsletter for exclusive travel deals, destination insights, and curated travel stories.</p>
+      <form class="newsletter-form" onsubmit="event.preventDefault(); window.showToast('Subscribed successfully!','success'); this.reset();">
+        <input type="email" placeholder="Enter your email" required />
+        <button type="submit" class="btn btn-primary">Subscribe</button>
+      </form>
+    </div>
+  </div>
+</section> -->
+
+<!-- ===== PARTNERS TICKER ===== -->
+<div class="partners-ticker">
+  <div class="ticker-track">
+    <span class="ticker-item">EMIRATES AIRLINES</span>
+    <span class="ticker-item">MARRIOTT INTERNATIONAL</span>
+    <span class="ticker-item">HILTON WORLDWIDE</span>
+    <span class="ticker-item">QATAR AIRWAYS</span>
+    <span class="ticker-item">FOUR SEASONS</span>
+    <span class="ticker-item">SINGAPORE AIRLINES</span>
+    <span class="ticker-item">RITZ-CARLTON</span>
+    <span class="ticker-item">LUFTHANSA</span>
+    <span class="ticker-item">EMIRATES AIRLINES</span>
+    <span class="ticker-item">MARRIOTT INTERNATIONAL</span>
+    <span class="ticker-item">HILTON WORLDWIDE</span>
+    <span class="ticker-item">QATAR AIRWAYS</span>
+    <span class="ticker-item">FOUR SEASONS</span>
+    <span class="ticker-item">SINGAPORE AIRLINES</span>
+    <span class="ticker-item">RITZ-CARLTON</span>
+    <span class="ticker-item">LUFTHANSA</span>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+  <div class="footer-giant-brand">STACKLY</div>
+  <div class="container footer-container">
+    <div class="footer-grid">
+      <div class="footer-col-brand">
+        <a href="index.html" class="footer-logo"><img src="images/logo-stackly.webp" alt="STACKLY" /></a>
+        <p class="footer-desc">Crafting extraordinary travel experiences and unforgettable journeys to the world's most stunning destinations since 2010.</p>
+        <div class="footer-social">
+          <a href="404.html" aria-label="X"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+          <a href="404.html" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+          <a href="404.html" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+          <a href="404.html" aria-label="LinkedIn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col footer-links">
+        <h4>Company</h4>
+        <a href="about.html">About</a>
+        <a href="destinations.html">Destinations</a>
+        <a href="experiences.html">Experiences</a>
+        <a href="blog.html">Blog</a>
+      </div>
+      <div class="footer-col footer-links">
+        <h4>Support</h4>
+        <a href="contact.html">Contact Us</a>
+        <a href="404.html">FAQ</a>
+        <a href="404.html">Help Center</a>
+        <a href="404.html">Travel Insurance</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <div style="font-size:0.95rem;color:var(--text-light-secondary);display:flex;flex-direction:column;gap:1rem;margin-top:1rem;">
+          <a href="mailto:coach@thestackly.com" style="display:flex;align-items:center;gap:0.6rem;transition:color 0.3s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--text-light-secondary)'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> coach@thestackly.com</a>
+          <a href="tel:+917010792745" style="display:flex;align-items:center;gap:0.6rem;transition:color 0.3s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--text-light-secondary)'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> +91 70107 92745</a>
+          <div style="display:flex;align-items:flex-start;gap:0.6rem;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-top:0.25rem;flex-shrink:0;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> MMR Complex, Chinna Thirupathi<br>Salem, Tamil Nadu - 636008</div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 STACKLY Tours & Travels. All Rights Reserved.</p>
+      <div class="footer-bottom-links" style="display:flex;gap:1.5rem;">
+        <a href="404.html" style="text-decoration:underline;">Privacy Policy</a>
+        <a href="404.html" style="text-decoration:underline;">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div id="toast-container" aria-live="polite"></div>
+<script src="auth.js"></script>
+<script src="main.js"></script>
+<script>
+  document.querySelectorAll('.dest-filter').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.dest-filter').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const filter = tab.textContent.trim();
+      document.querySelectorAll('.dest-card').forEach(card => {
+        if (filter === 'All Experiences') {
+          card.style.display = '';
+        } else {
+          const meta = card.querySelector('.dest-card-meta');
+          card.style.display = (meta && meta.textContent.includes(filter)) ? '' : 'none';
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>

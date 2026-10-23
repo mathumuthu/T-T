@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STACKLY Tours & Travels - Customer Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #64748b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #06b6d4;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --sidebar-width: 280px;
+            --sidebar-collapsed: 80px;
+        }
+        * { font-family: 'Inter', sans-serif; }
+        body { background: #f1f5f9; overflow-x: hidden; }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: #fff;
+            border-right: 1px solid #e2e8f0;
+            z-index: 1040;
+            transition: transform 0.3s ease, width 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+        .sidebar.collapsed { width: var(--sidebar-collapsed); }
+        .sidebar-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+        .logo-icon {
+            width: 40px; height: 40px;
+            background: var(--primary);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 1.1rem;
+        }
+        .logo-text { font-weight: 700; font-size: 1.1rem; color: var(--dark); }
+        .sidebar-close {
+            background: none; border: none;
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--secondary);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .sidebar-close:hover { background: #f1f5f9; }
+
+        .sidebar-profile {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex; align-items: center; gap: 0.75rem;
+        }
+        .sidebar-profile img {
+            width: 40px; height: 40px;
+            border-radius: 50%; object-fit: cover;
+            border: 2px solid #e2e8f0;
+        }
+        .sidebar-profile-info { flex: 1; min-width: 0; }
+        .sidebar-profile-info p { margin: 0; }
+        .sidebar-profile-info .name { font-weight: 600; font-size: 0.875rem; color: var(--dark); }
+        .sidebar-profile-info .role { font-size: 0.75rem; color: var(--secondary); }
+        .online-dot {
+            width: 8px; height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+        .sidebar-nav { flex: 1; padding: 1rem 0.75rem; }
+        .sidebar-menu { list-style: none; padding: 0; margin: 0; }
+        .menu-item { margin-bottom: 0.25rem; }
+        .menu-link {
+            display: flex; align-items: center; gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            color: var(--secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            border: none; background: none; width: 100%; text-align: left;
+            cursor: pointer;
+        }
+        .menu-link:hover, .menu-link.active {
+            background: rgba(99,102,241,0.08);
+            color: var(--primary);
+        }
+        .menu-link.active { border-right: 3px solid var(--primary); }
+        .menu-icon { width: 20px; text-align: center; font-size: 1rem; }
+        .menu-badge {
+            margin-left: auto;
+            background: var(--danger);
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.15rem 0.5rem;
+            border-radius: 20px;
+        }
+        .menu-badge.warning { background: var(--warning); }
+        .sidebar-section-title {
+            padding: 0.5rem 1rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .sidebar-footer {
+            padding: 1rem 1.25rem;
+            border-top: 1px solid #e2e8f0;
+        }
+        .logout-btn {
+            display: flex; align-items: center; gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            color: var(--danger);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .logout-btn:hover { background: rgba(239,68,68,0.08); }
+
+        .mobile-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1035;
+            display: none;
+        }
+        .mobile-overlay.show { display: block; }
+
+        .main-wrapper {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: margin-left 0.3s ease;
+        }
+        .main-wrapper.sidebar-collapsed { margin-left: var(--sidebar-collapsed); }
+
+        .main-header {
+            background: #fff;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky; top: 0; z-index: 1020;
+        }
+        .header-left { display: flex; align-items: center; gap: 1rem; }
+        .hamburger-menu, .sidebar-toggle {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            border: none; background: #f1f5f9;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--secondary);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .hamburger-menu:hover, .sidebar-toggle:hover { background: #e2e8f0; }
+        .header-title h1 { font-size: 1.25rem; font-weight: 700; color: var(--dark); margin: 0; }
+        .header-title p { font-size: 0.8rem; color: var(--secondary); margin: 0; }
+        .header-right { display: flex; align-items: center; gap: 0.75rem; }
+        .header-icon-wrapper { position: relative; }
+        .header-icon {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            background: #f1f5f9;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--secondary);
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .header-icon:hover { background: #e2e8f0; }
+        .notification-badge {
+            position: absolute; top: 4px; right: 4px;
+            width: 8px; height: 8px;
+            background: var(--danger);
+            border-radius: 50%;
+        }
+        .header-profile {
+            display: flex; align-items: center; gap: 0.75rem;
+            padding-left: 0.75rem;
+            border-left: 1px solid #e2e8f0;
+        }
+        .header-profile img {
+            width: 36px; height: 36px;
+            border-radius: 50%; object-fit: cover;
+        }
+        .header-profile-info { line-height: 1.2; }
+        .header-profile-info .name { font-weight: 600; font-size: 0.85rem; color: var(--dark); }
+        .header-profile-info .role { font-size: 0.75rem; color: var(--secondary); }
+
+        .main-content { flex: 1; padding: 1.5rem; }
+        .content-section { display: none; animation: fadeIn 0.3s ease; }
+        .content-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .stat-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.1);
+        }
+        .stat-card-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .stat-label { font-size: 0.8rem; color: var(--secondary); margin-bottom: 0.5rem; }
+        .stat-value { font-size: 1.75rem; font-weight: 700; color: var(--dark); margin-bottom: 0.25rem; }
+        .stat-change { font-size: 0.75rem; }
+        .stat-change.positive { color: var(--success); }
+        .stat-change.negative { color: var(--danger); }
+        .stat-icon {
+            width: 48px; height: 48px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.25rem;
+        }
+        .bg-primary-soft { background: rgba(99,102,241,0.1); }
+        .bg-success-soft { background: rgba(16,185,129,0.1); }
+        .bg-warning-soft { background: rgba(245,158,11,0.1); }
+        .bg-danger-soft { background: rgba(239,68,68,0.1); }
+        .bg-info-soft { background: rgba(6,182,212,0.1); }
+        .text-primary { color: var(--primary) !important; }
+        .text-success { color: var(--success) !important; }
+        .text-warning { color: var(--warning) !important; }
+        .text-danger { color: var(--danger) !important; }
+        .text-info { color: var(--info) !important; }
+
+        .content-card {
+            background: #fff;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+        .card-header-custom {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .card-header-custom h5 { font-weight: 600; color: var(--dark); margin: 0; }
+        .card-body-custom { padding: 1.5rem; }
+
+        .table-custom { width: 100%; margin-bottom: 0; }
+        .table-custom thead th {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            background: #f8fafc;
+        }
+        .table-custom tbody td {
+            padding: 1rem 1.5rem;
+            font-size: 0.875rem;
+            color: var(--dark);
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+        }
+        .table-custom tbody tr:hover { background: #f8fafc; }
+        .badge-status {
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .status-active { background: rgba(16,185,129,0.1); color: var(--success); }
+        .status-pending { background: rgba(245,158,11,0.1); color: var(--warning); }
+        .status-closed { background: rgba(99,102,241,0.1); color: var(--primary); }
+        .status-inactive { background: rgba(239,68,68,0.1); color: var(--danger); }
+        .case-id { font-family: monospace; font-weight: 600; color: var(--primary); }
+        .btn-action {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            background: #f1f5f9;
+            display: inline-flex; align-items: center; justify-content: center;
+            color: var(--secondary);
+            text-decoration: none;
+            margin-right: 0.25rem;
+            transition: all 0.2s;
+        }
+        .btn-action:hover { background: rgba(99,102,241,0.1); color: var(--primary); }
+
+        .document-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        .document-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.1);
+        }
+        .document-icon {
+            width: 50px; height: 50px;
+            border-radius: 12px;
+            background: rgba(99,102,241,0.1);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.25rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        .document-card h5 { font-size: 1rem; font-weight: 600; color: var(--dark); margin-bottom: 0.5rem; }
+        .document-card p { font-size: 0.8rem; color: var(--secondary); margin-bottom: 1rem; }
+        .document-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .document-meta span { font-size: 0.75rem; color: var(--secondary); }
+
+        .service-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        .service-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.1);
+        }
+        .service-icon {
+            width: 50px; height: 50px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+        .service-card h4 { font-size: 1rem; font-weight: 600; color: var(--dark); margin-bottom: 0.5rem; }
+        .service-card p { font-size: 0.8rem; color: var(--secondary); margin-bottom: 1rem; }
+        .service-stat {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        .service-stat span:first-child { font-size: 0.75rem; color: var(--secondary); }
+        .service-stat span:last-child { font-size: 0.875rem; font-weight: 600; color: var(--dark); }
+
+        .progress-custom { height: 8px; border-radius: 4px; background: #f1f5f9; overflow: hidden; margin-bottom: 1rem; }
+        .progress-bar-custom { height: 100%; border-radius: 4px; transition: width 1s ease; }
+
+        .chart-container { position: relative; height: 300px; width: 100%; }
+
+        .notification-item {
+            display: flex; align-items: flex-start; gap: 1rem;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+            transition: all 0.2s;
+        }
+        .notification-item:hover { background: #f8fafc; }
+        .notification-icon {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .notification-content { flex: 1; }
+        .notification-content p { margin: 0; }
+        .notification-title { font-weight: 600; font-size: 0.875rem; color: var(--dark); }
+        .notification-desc { font-size: 0.8rem; color: var(--secondary); }
+        .notification-time { font-size: 0.75rem; color: var(--primary); margin-top: 0.25rem; }
+
+        .chat-container { display: flex; flex-direction: column; height: 500px; }
+        .chat-sidebar { border-right: 1px solid #e2e8f0; }
+        .chat-contact {
+            display: flex; align-items: center; gap: 0.75rem;
+            padding: 1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .chat-contact:hover, .chat-contact.active { background: #f8fafc; }
+        .chat-contact img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
+        .chat-contact-info { flex: 1; }
+        .chat-contact-info p { margin: 0; }
+        .chat-contact-name { font-weight: 600; font-size: 0.875rem; color: var(--dark); }
+        .chat-contact-msg { font-size: 0.75rem; color: var(--secondary); }
+        .chat-contact-time { font-size: 0.7rem; color: var(--secondary); }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 1rem; }
+        .chat-message {
+            display: flex; gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        .chat-message.sent { justify-content: flex-end; }
+        .chat-message img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+        .chat-bubble {
+            max-width: 70%;
+            padding: 0.75rem 1rem;
+            border-radius: 16px;
+            font-size: 0.875rem;
+        }
+        .chat-bubble.received { background: #f1f5f9; color: var(--dark); border-radius: 16px 16px 16px 4px; }
+        .chat-bubble.sent { background: var(--primary); color: #fff; border-radius: 16px 16px 4px 16px; }
+        .chat-bubble-time { font-size: 0.7rem; margin-top: 0.25rem; opacity: 0.7; }
+        .chat-input-area {
+            padding: 1rem;
+            border-top: 1px solid #e2e8f0;
+            display: flex; gap: 0.75rem;
+        }
+        .chat-input {
+            flex: 1;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            outline: none;
+        }
+        .chat-input:focus { border-color: var(--primary); }
+        .chat-send-btn {
+            width: 44px; height: 44px;
+            border-radius: 12px;
+            background: var(--primary);
+            border: none;
+            color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .chat-send-btn:hover { background: var(--primary-dark); }
+
+        .form-control-custom {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 0.875rem;
+            color: var(--dark);
+            background: #fff;
+            transition: border-color 0.2s;
+        }
+        .form-control-custom:focus { outline: none; border-color: var(--primary); }
+        .form-label { font-size: 0.875rem; font-weight: 500; color: var(--dark); margin-bottom: 0.5rem; }
+
+        .toggle-switch {
+            width: 48px; height: 26px;
+            border-radius: 13px;
+            background: #e2e8f0;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.2s;
+            flex-shrink: 0;
+        }
+        .toggle-switch.on { background: var(--primary); }
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 22px; height: 22px;
+            border-radius: 50%;
+            background: #fff;
+            top: 2px; left: 2px;
+            transition: transform 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .toggle-switch.on::after { transform: translateX(22px); }
+
+        .main-footer {
+            background: #fff;
+            border-top: 1px solid #e2e8f0;
+            padding: 1rem 1.5rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--secondary);
+        }
+
+        .section-header { margin-bottom: 1.5rem; }
+        .section-title { font-size: 1.5rem; font-weight: 700; color: var(--dark); margin-bottom: 0.5rem; }
+        .breadcrumb { font-size: 0.8rem; margin: 0; }
+        .breadcrumb a { color: var(--primary); text-decoration: none; }
+        .breadcrumb-item.active { color: var(--secondary); }
+
+        .activity-item {
+            display: flex; align-items: flex-start; gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .activity-item:last-child { border-bottom: none; }
+        .activity-icon {
+            width: 36px; height: 36px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .activity-content p { margin: 0; }
+        .activity-title { font-size: 0.875rem; font-weight: 500; color: var(--dark); }
+        .activity-time { font-size: 0.75rem; color: var(--secondary); }
+
+        .quick-action-btn {
+            display: block;
+            padding: 1.25rem;
+            border-radius: 12px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .quick-action-btn:hover {
+            background: rgba(99,102,241,0.05);
+            border-color: rgba(99,102,241,0.2);
+        }
+        .quick-action-btn i { font-size: 1.5rem; margin-bottom: 0.75rem; display: block; }
+        .quick-action-btn span { font-size: 0.875rem; font-weight: 600; color: var(--dark); display: block; }
+        .quick-action-btn small { font-size: 0.75rem; color: var(--secondary); }
+
+        .request-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        .request-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.1);
+        }
+
+        @media (max-width: 991.98px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.show { transform: translateX(0); }
+            .main-wrapper { margin-left: 0 !important; }
+            .sidebar-toggle { display: none !important; }
+        }
+        @media (min-width: 992px) {
+            .hamburger-menu { display: none !important; }
+            .sidebar-close { display: none !important; }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+/* Desktop */
+@media (min-width: 992px) {
+    .hamburger-menu,
+    .sidebar-toggle {
+        display: none !important;
+    }
+}
+
+/* Mobile */
+@media (max-width: 991.98px) {
+    .hamburger-menu {
+        display: flex !important;
+    }
+
+    .sidebar-toggle {
+        display: none !important;
+    }
+}
+
+
+
+
+
+/* Mobile Responsive Fix */
+@media (max-width: 768px) {
+
+    .main-content {
+        padding: 1rem;
+    }
+
+    .main-header {
+        padding: 0.75rem 1rem;
+    }
+
+    .header-title h1 {
+        font-size: 1rem;
+    }
+
+    .header-title p {
+        font-size: 0.75rem;
+    }
+
+    .header-right {
+        gap: 0.5rem;
+    }
+
+    .header-profile-info {
+        display: none;
+    }
+
+    .stat-card {
+        padding: 1rem;
+    }
+
+    .stat-value {
+        font-size: 1.4rem;
+    }
+
+    .card-header-custom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .card-body-custom {
+        padding: 1rem;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .table-custom {
+        min-width: 700px;
+    }
+
+    .chat-container {
+        height: auto;
+    }
+
+    .chat-sidebar {
+        border-right: none;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .chat-bubble {
+        max-width: 90%;
+    }
+
+    .document-card,
+    .service-card,
+    .request-card {
+        padding: 1rem;
+    }
+
+    .section-title {
+        font-size: 1.25rem;
+    }
+
+    .chart-container {
+        height: 250px;
+    }
+
+    .quick-action-btn {
+        padding: 1rem;
+    }
+
+    .quick-action-btn span {
+        font-size: 0.8rem;
+    }
+
+    .quick-action-btn small {
+        font-size: 0.7rem;
+    }
+
+    .main-footer {
+        padding: 1rem;
+        font-size: 0.75rem;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 576px) {
+
+    .header-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .stat-card-content {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .stat-icon {
+        width: 42px;
+        height: 42px;
+    }
+
+    .section-title {
+        font-size: 1.1rem;
+    }
+
+    .breadcrumb {
+        display: none;
+    }
+
+    .card-header-custom h5 {
+        font-size: 0.95rem;
+    }
+}
+
+
+
+
+
+
+        
+    </style>
+
+</head>
+<body>
+
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="index.html" class="logo">
+    <img src="logo.webp"
+         alt="STACKLY Travel Logo"
+         style="   width:45px;height:45px;border-radius:10px;object-fit:cover;">
+
+    <span class="logo-text">Stackly</span>
+</a>
+            <button class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></button>
+        </div>
+
+        <!-- <div class="sidebar-profile">
+            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&h=100&fit=crop&crop=face" alt="User">
+            <div class="sidebar-profile-info">
+                <p class="name">Alex Thompson</p>
+                <p class="role">Premium Traveller</p>
+            </div>
+            <div class="online-dot"></div>
+        </div> -->
+
+        <nav class="sidebar-nav">
+            <ul class="sidebar-menu">
+                <li class="menu-item">
+                    <button class="menu-link active" onclick="showSection('dashboard')" id="nav-dashboard">
+                        <i class="fas fa-th-large menu-icon"></i>
+                        <span>Dashboard</span>
+                    </button>
+                </li>
+                <li class="menu-item">
+                    <button class="menu-link" onclick="showSection('mytrips')" id="nav-mytrips">
+                        <i class="fas fa-folder-open menu-icon"></i>
+                        <span>My Trips</span>
+                    </button>
+                </li>
+                <li class="menu-item">
+                    <button class="menu-link" onclick="showSection('requests')" id="nav-requests">
+                        <i class="fas fa-clipboard-list menu-icon"></i>
+                        <span>My Bookings</span>
+                    </button>
+                </li>
+                <!-- <li class="menu-item">
+                    <button class="menu-link" onclick="showSection('services')" id="nav-services">
+                        <i class="fas fa-robot menu-icon"></i>
+                        <span>AI Services</span>
+                    </button>
+                </li> -->
+                <li class="menu-item">
+                    <button class="menu-link" onclick="showSection('documents')" id="nav-documents">
+                        <i class="fas fa-file-alt menu-icon"></i>
+                        <span>Travel Documents</span>
+                    </button>
+                </li>
+                 <!-- <li class="menu-item">
+                    <button class="menu-link" onclick="showSection('messages')" id="nav-messages">
+                        <i class="fas fa-envelope menu-icon"></i>
+                        <span>Messages</span>
+                        <span class="menu-badge">2</span>
+                    </button>
+                </li>  -->
+                <li class="menu-item">
+                    <button class="menu-link" onclick="showSection('notifications')" id="nav-notifications">
+                        <i class="fas fa-bell menu-icon"></i>
+                        <span>Notifications</span>
+                        <span class="menu-badge warning">5</span>
+                    </button>
+                </li>
+            </ul>
+            <div class="sidebar-section-title">Travel Account</div>
+             <ul class="sidebar-menu">
+                <!-- <li class="menu-item">
+                    <button class="menu-link" onclick="showSection('profile')" id="nav-profile">
+                        <i class="fas fa-id-card menu-icon"></i>
+                        <span>Profile</span>
+                    </button>
+                </li> -->
+                <li class="menu-item">
+                    <button class="menu-link" onclick="showSection('settings')" id="nav-settings">
+                        <i class="fas fa-cog menu-icon"></i>
+                        <span>Settings</span>
+                    </button>
+                </li>
+            </ul> 
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="login.html" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <div class="main-wrapper" id="mainWrapper">
+        <header class="main-header">
+            <div class="header-left">
+                <button class="hamburger-menu" id="hamburgerMenu"><i class="fas fa-bars"></i></button>
+                <button class="sidebar-toggle" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+                <div class="header-title">
+    <h1 id="pageTitle">Dashboard Overview</h1>
+    <p id="welcomeUser">Manage your trips, bookings and travel documents in one place</p>
+</div>
+            </div>
+            <div class="header-right">
+                <div class="header-icon-wrapper">
+                    <a href="404.html" class="header-icon"><i class="fas fa-bell"></i><span class="notification-badge"></span></a>
+                </div>
+                <div class="header-icon-wrapper">
+                    <a href="404.html" class="header-icon"><i class="fas fa-search"></i></a>
+                </div>
+                 <!-- <div class="header-profile">
+                    <img src="hum2.webp" alt="User">
+                    <div class="header-profile-info d-none d-md-block">
+                        <div class="name">Alex Thompson</div>
+                        <div class="role">Premium</div>
+                    </div>
+                </div> -->
+            </div> 
+        </header>
+
+        <main class="main-content">
+
+            <!-- DASHBOARD SECTION -->
+            <section class="content-section active" id="dashboard">
+                <div class="section-header">
+                    <h1 class="section-title">My Travel Dashboard</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item active">Dashboard</li>
+                        </ol>
+                    </nav>
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-xl-3 col-md-6">
+                        <div class="stat-card">
+                            <div class="stat-card-content">
+                                <div>
+                                    <p class="stat-label">Upcoming Trips</p>
+                                    <h3 class="stat-value">5</h3>
+                                    <p class="stat-change positive"><i class="fas fa-arrow-up"></i> 2 new this month</p>
+                                </div>
+                                <div class="stat-icon bg-primary-soft"><i class="fas fa-folder-open text-primary"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="stat-card">
+                            <div class="stat-card-content">
+                                <div>
+                                    <p class="stat-label">Destinations Explored</p>
+                                    <h3 class="stat-value">3</h3>
+                                    <p class="stat-change positive"><i class="fas fa-arrow-up"></i> 1 new this month</p>
+                                </div>
+                                <div class="stat-icon bg-success-soft"><i class="fas fa-robot text-success"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="stat-card">
+                            <div class="stat-card-content">
+                                <div>
+                                    <p class="stat-label">Documents</p>
+                                    <h3 class="stat-value">12</h3>
+                                    <p class="stat-change positive"><i class="fas fa-arrow-up"></i> 3 new this month</p>
+                                </div>
+                                <div class="stat-icon bg-warning-soft"><i class="fas fa-file-alt text-warning"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="stat-card">
+                            <div class="stat-card-content">
+                                <div>
+                                    <p class="stat-label">Pending Bookings</p>
+                                    <h3 class="stat-value">2</h3>
+                                    <p class="stat-change negative"><i class="fas fa-arrow-down"></i> 1 resolved</p>
+                                </div>
+                                <div class="stat-icon bg-info-soft"><i class="fas fa-ticket-alt text-info"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-lg-8">
+                        <div class="content-card">
+                            <div class="card-header-custom">
+                                <h5 class="card-title">Travel Activity Timeline</h5>
+                                <select class="form-control-custom" style="width:auto;padding:0.35rem 0.75rem;font-size:0.8rem">
+                                    <option>Upcoming Trips & Itineraries</option>
+                                    <option>This Month</option>
+                                </select>
+                            </div>
+                            <div class="card-body-custom">
+                                <div class="chart-container"><canvas id="userTripChart"></canvas></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="content-card">
+                            <div class="card-header-custom"><h5 class="card-title">Trip Categories</h5></div>
+                            <div class="card-body-custom">
+                                <div style="height:200px"><canvas id="userServiceChart"></canvas></div>
+                                <div class="mt-3">
+                                    <div class="distribution-item">
+                                        <div class="distribution-info"><span class="distribution-name">Domestic Tours</span><span class="distribution-value">45%</span></div>
+                                        <div class="progress-custom"><div class="progress-bar-custom bg-primary" style="width:45%"></div></div>
+                                    </div>
+                                    <div class="distribution-item">
+                                        <div class="distribution-info"><span class="distribution-name">International Tours</span><span class="distribution-value">30%</span></div>
+                                        <div class="progress-custom"><div class="progress-bar-custom" style="width:30%;background:#8b5cf6"></div></div>
+                                    </div>
+                                    <div class="distribution-item">
+                                        <div class="distribution-info"><span class="distribution-name">Adventure Trips</span><span class="distribution-value">25%</span></div>
+                                        <div class="progress-custom"><div class="progress-bar-custom bg-success" style="width:25%"></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="content-card">
+                            <div class="card-header-custom">
+                                <h5 class="card-title">Recent Activity</h5>
+                                <a href="404.html" class="text-primary" style="font-size:0.8rem">View All</a>
+                            </div>
+                            <div class="card-body-custom">
+                                <div class="activity-item">
+                                    <div class="activity-icon bg-primary-soft"><i class="fas fa-robot text-primary" style="font-size:0.8rem"></i></div>
+                                    <div class="activity-content">
+                                        <p class="activity-title">Your Kerala backwater trip itinerary is confirmed</p>
+                                        <p class="activity-time">2 hours ago - Trip: Kerala Backwater Escape</p>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon bg-success-soft"><i class="fas fa-check text-success" style="font-size:0.8rem"></i></div>
+                                    <div class="activity-content">
+                                        <p class="activity-title">Hotel reservation confirmed for Dubai City Explorer</p>
+                                        <p class="activity-time">1 day ago - Trip: Dubai City Explorer</p>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon" style="background:rgba(139,92,246,0.1)"><i class="fas fa-file-upload" style="color:#8b5cf6;font-size:0.8rem"></i></div>
+                                    <div class="activity-content">
+                                        <p class="activity-title">Travel insurance document uploaded</p>
+                                        <p class="activity-time">2 days ago</p>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon bg-warning-soft"><i class="fas fa-ticket-alt text-warning" style="font-size:0.8rem"></i></div>
+                                    <div class="activity-content">
+                                        <p class="activity-title">Airport pickup request confirmed</p>
+                                        <p class="activity-time">3 days ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="content-card">
+                            <div class="card-header-custom"><h5 class="card-title">Quick Actions</h5></div>
+                            <div class="card-body-custom">
+                                <div class="row g-3">
+                                    <div class="col-6">
+                                        <a href="404.html" class="quick-action-btn">
+                                            <i class="fas fa-plus-circle text-primary"></i>
+                                            <span>Plan a New Trip</span>
+                                            <small>Plan your next trip</small>
+                                        </a>
+                                    </div>
+                                    <div class="col-6">
+                                        <a href="404.html" class="quick-action-btn">
+                                            <i class="fas fa-upload" style="color:#8b5cf6"></i>
+                                            <span>Upload Passport / Visa</span>
+                                            <small>Keep your passport, visa and booking documents in one place</small>
+                                        </a>
+                                    </div>
+                                    <div class="col-6">
+                                        <a href="404.html" class="quick-action-btn">
+                                            <i class="fas fa-comments text-success"></i>
+                                            <span>Contact Travel Agent</span>
+                                            <small>Get help with your journey</small>
+                                        </a>
+                                    </div>
+                                    <div class="col-6">
+                                        <a href="404.html" class="quick-action-btn">
+                                            <i class="fas fa-chart-line text-warning"></i>
+                                            <span>Explore Tour Packages</span>
+                                            <small>Find destinations and holiday packages for your next trip</small>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MY TRIPS SECTION -->
+            <section class="content-section" id="mytrips">
+                <div class="section-header">
+                    <h1 class="section-title">My Trips</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item active">My Trips</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="content-card">
+                    <div class="card-header-custom">
+                        <h5 class="card-title">Upcoming Trips & Itineraries</h5>
+                        <a href="404.html" class="btn btn-sm btn-primary" style="background:var(--primary);border-color:var(--primary)"><i class="fas fa-plus me-2"></i>Plan New Trip</a>
+                    </div>
+                    <div class="card-body-custom">
+                        <div class="mb-4 p-3 rounded-3" style="border:1px solid #e2e8f0">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div><h6 class="fw-bold mb-1">Kerala Backwater Escape</h6><p class="mb-0" style="font-size:0.8rem;color:var(--secondary)">Departure: Nov 12, 2026</p></div>
+                                <span class="badge-status status-active">Active</span>
+                            </div>
+                            <div class="mb-2"><div class="d-flex justify-content-between" style="font-size:0.8rem"><span style="color:var(--secondary)">Progress</span><span class="fw-bold">80%</span></div><div class="progress-custom"><div class="progress-bar-custom bg-primary" style="width:80%"></div></div></div>
+                            <div class="d-flex gap-4" style="font-size:0.8rem;color:var(--secondary)"><span><i class="fas fa-calendar me-1"></i>Return: Nov 16, 2026</span><span><i class="fas fa-robot me-1"></i>Backwater & Nature Tour</span></div>
+                        </div>
+                        <div class="mb-4 p-3 rounded-3" style="border:1px solid #e2e8f0">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div><h6 class="fw-bold mb-1">Dubai City Explorer</h6><p class="mb-0" style="font-size:0.8rem;color:var(--secondary)">Departure: Dec 05, 2026</p></div>
+                                <span class="badge-status status-closed">In Progress</span>
+                            </div>
+                            <div class="mb-2"><div class="d-flex justify-content-between" style="font-size:0.8rem"><span style="color:var(--secondary)">Progress</span><span class="fw-bold">45%</span></div><div class="progress-custom"><div class="progress-bar-custom" style="width:45%;background:#8b5cf6"></div></div></div>
+                            <div class="d-flex gap-4" style="font-size:0.8rem;color:var(--secondary)"><span><i class="fas fa-calendar me-1"></i>Return: Dec 10, 2026</span><span><i class="fas fa-chart-bar me-1"></i>City & Culture Tour</span></div>
+                        </div>
+                        <div class="p-3 rounded-3" style="border:1px solid #e2e8f0">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div><h6 class="fw-bold mb-1">Ooty Nature Retreat</h6><p class="mb-0" style="font-size:0.8rem;color:var(--secondary)">Departure: Dec 20, 2026</p></div>
+                                <span class="badge-status status-pending">Planning</span>
+                            </div>
+                            <div class="mb-2"><div class="d-flex justify-content-between" style="font-size:0.8rem"><span style="color:var(--secondary)">Progress</span><span class="fw-bold">20%</span></div><div class="progress-custom"><div class="progress-bar-custom bg-warning" style="width:20%"></div></div></div>
+                            <div class="d-flex gap-4" style="font-size:0.8rem;color:var(--secondary)"><span><i class="fas fa-calendar me-1"></i>Return: Dec 24, 2026</span><span><i class="fas fa-eye me-1"></i>Nature & Hill Station Tour</span></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MY REQUESTS SECTION -->
+            <section class="content-section" id="requests">
+                <div class="section-header">
+                    <h1 class="section-title">My Bookings</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item active">My Bookings</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="content-card">
+                    <div class="card-header-custom">
+                        <h5 class="card-title">My Holiday Bookings</h5>
+                        <a href="404.html" class="btn btn-sm btn-primary" style="background:var(--primary);border-color:var(--primary)"><i class="fas fa-plus me-2"></i>Plan a New Trip</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table-custom">
+                            <thead>
+                                <tr><th>Booking ID</th><th>Travel Request</th><th>Booking Type</th><th>Status</th><th>Date</th><th>Actions</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="case-id">#INQ-2026-089</span></td>
+                                    <td>Request a room upgrade</td>
+                                    <td>Hotel Request</td>
+                                    <td><span class="badge-status status-closed">Under Review</span></td>
+                                    <td style="font-size:0.8rem;color:var(--secondary)">Jul 5, 2026</td>
+                                    <td><a href="404.html" class="btn-action"><i class="fas fa-eye"></i></a></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="case-id">#INQ-2026-076</span></td>
+                                    <td>Confirm airport pickup details</td>
+                                    <td>Transport Query</td>
+                                    <td><span class="badge-status status-active">Resolved</span></td>
+                                    <td style="font-size:0.8rem;color:var(--secondary)">Jun 28, 2026</td>
+                                    <td><a href="404.html" class="btn-action"><i class="fas fa-eye"></i></a></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="case-id">#INQ-2026-065</span></td>
+                                    <td>Add a sightseeing package</td>
+                                    <td>Hotel Request</td>
+                                    <td><span class="badge-status status-pending">Pending</span></td>
+                                    <td style="font-size:0.8rem;color:var(--secondary)">Jun 20, 2026</td>
+                                    <td><a href="404.html" class="btn-action"><i class="fas fa-eye"></i></a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AI SERVICES SECTION -->
+            <section class="content-section" id="services">
+                <div class="section-header">
+                    <h1 class="section-title">My Tours & Travel Services</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item active">Tours & Travel Services</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="service-card">
+                            <div class="service-icon bg-primary-soft"><i class="fas fa-comments text-primary"></i></div>
+                            <h4>Backwater & Nature Tour</h4>
+                            <p>Personalized holiday planning, hotel stays and guided sightseeing experiences.</p>
+                            <div class="service-stat"><span>Status</span><span style="color:var(--success)">Active</span></div>
+                            <div class="service-stat"><span>Trips planned</span><span>12</span></div>
+                            <a href="404.html" class="btn btn-outline-primary w-100 btn-sm" style="border-color:var(--primary);color:var(--primary)">View Details</a>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="service-card">
+                            <div class="service-icon" style="background:rgba(139,92,246,0.1)"><i class="fas fa-chart-bar" style="color:#8b5cf6"></i></div>
+                            <h4>City & Culture Tour</h4>
+                            <p>Flight, hotel and local transport arrangements for a smooth travel experience.</p>
+                            <div class="service-stat"><span>Status</span><span style="color:var(--success)">Active</span></div>
+                            <div class="service-stat"><span>Bookings managed</span><span>24</span></div>
+                            <a href="404.html" class="btn btn-outline-primary w-100 btn-sm" style="border-color:var(--primary);color:var(--primary)">View Details</a>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="service-card">
+                            <div class="service-icon bg-success-soft"><i class="fas fa-eye text-success"></i></div>
+                            <h4>Nature & Hill Station Tour</h4>
+                            <p>Adventure tours, nature escapes and customized destination experiences.</p>
+                            <div class="service-stat"><span>Status</span><span style="color:var(--warning)">Planning</span></div>
+                            <div class="service-stat"><span>Tours available</span><span>0</span></div>
+                            <a href="404.html" class="btn btn-outline-primary w-100 btn-sm" style="border-color:var(--primary);color:var(--primary)">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DOCUMENTS SECTION -->
+            <section class="content-section" id="documents">
+                <div class="section-header">
+                    <h1 class="section-title">Travel Documents</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item active">Documents</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="content-card">
+                    <div class="card-header-custom">
+                        <h5 class="card-title">Passport, Visa & Booking Files</h5>
+                        <a href="404.html" class="btn btn-sm btn-primary" style="background:var(--primary);border-color:var(--primary)"><i class="fas fa-upload me-2"></i>Upload Passport / Visa</a>
+                    </div>
+                    <div class="card-body-custom">
+                        <div class="row g-4">
+                            <div class="col-md-6 col-lg-4">
+                                <div class="document-card">
+                                    <div class="document-icon" style="background:rgba(239,68,68,0.1)"><i class="fas fa-file-pdf text-danger"></i></div>
+                                    <h5>Kerala_Trip_Itinerary.pdf</h5>
+                                    <p>2.4 MB</p>
+                                    <div class="document-meta">
+                                        <span>Updated: Oct 20, 2026</span>
+                                        <a href="404.html" class="btn btn-sm btn-outline-secondary"><i class="fas fa-download"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="document-card">
+                                    <div class="document-icon bg-primary-soft"><i class="fas fa-file-word text-primary"></i></div>
+                                    <h5>Dubai_Booking_Confirmation.docx</h5>
+                                    <p>856 KB</p>
+                                    <div class="document-meta">
+                                        <span>Updated: Oct 18, 2026</span>
+                                        <a href="404.html" class="btn btn-sm btn-outline-secondary"><i class="fas fa-download"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="document-card">
+                                    <div class="document-icon bg-success-soft"><i class="fas fa-file-excel text-success"></i></div>
+                                    <h5>Travel_Expense_Plan.xlsx</h5>
+                                    <p>1.2 MB</p>
+                                    <div class="document-meta">
+                                        <span>Updated: Oct 15, 2026</span>
+                                        <a href="404.html" class="btn btn-sm btn-outline-secondary"><i class="fas fa-download"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MESSAGES SECTION -->
+            <section class="content-section" id="messages">
+                <div class="section-header">
+                    <h1 class="section-title">Messages</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item active">Messages</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="content-card">
+                    <div class="row g-0">
+                        <div class="col-lg-4 chat-sidebar" style="border-right:1px solid #e2e8f0">
+                            <div class="p-3" style="border-bottom:1px solid #e2e8f0"><h6 class="fw-bold mb-0">Conversations</h6></div>
+                            <div class="p-2">
+                                <div class="chat-contact active">
+                                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face" alt="">
+                                    <div class="chat-contact-info">
+                                        <p class="chat-contact-name">David Miller</p>
+                                        <p class="chat-contact-msg">Your Kerala trip itinerary is ready!</p>
+                                    </div>
+                                    <span class="chat-contact-time">5m</span>
+                                </div>
+                                <div class="chat-contact">
+                                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face" alt="">
+                                    <div class="chat-contact-info">
+                                        <p class="chat-contact-name">Emma Wilson</p>
+                                        <p class="chat-contact-msg">Your travel package details are confirmed</p>
+                                    </div>
+                                    <span class="chat-contact-time">2h</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="p-3 d-flex align-items-center gap-3" style="border-bottom:1px solid #e2e8f0">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face" style="width:40px;height:40px;border-radius:50%;object-fit:cover" alt="">
+                                <div><p class="fw-bold mb-0" style="font-size:0.875rem">David Miller</p><p class="mb-0" style="font-size:0.75rem;color:var(--success)">Online</p></div>
+                            </div>
+                            <div class="chat-messages">
+                                <div class="chat-message">
+                                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face" alt="">
+                                    <div class="chat-bubble received">
+                                        <p class="mb-0">Hi Alex, great news! Your trip itinerary is ready. Would you like us to arrange local experiences or sightseeing tickets?</p>
+                                        <p class="chat-bubble-time">9:00 AM</p>
+                                    </div>
+                                </div>
+                                <div class="chat-message sent">
+                                    <div class="chat-bubble sent">
+                                        <p class="mb-0">That is fantastic! Please share your arrival time and pickup location so we can finalize your transfer.</p>
+                                        <p class="chat-bubble-time">9:15 AM</p>
+                                    </div>
+                                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&h=100&fit=crop&crop=face" alt="">
+                                </div>
+                            </div>
+                            <div class="chat-input-area">
+                                <input type="text" class="chat-input" placeholder="Type a message...">
+                                <a href="404.html" class="chat-send-btn"><i class="fas fa-paper-plane"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- NOTIFICATIONS SECTION -->
+            <section class="content-section" id="notifications">
+                <div class="section-header">
+                    <h1 class="section-title">Notifications</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item active">Notifications</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="content-card">
+                    <div class="card-header-custom"><h5 class="card-title">All Notifications</h5></div>
+                    <div class="card-body-custom">
+                        <div class="notification-item" style="background:rgba(99,102,241,0.05);border:1px solid rgba(99,102,241,0.1)">
+                            <div class="notification-icon bg-primary-soft"><i class="fas fa-robot text-primary"></i></div>
+                            <div class="notification-content">
+                                <p class="notification-title">Travel itinerary confirmed</p>
+                                <p class="notification-desc">Your Kerala Backwater Escape itinerary is confirmed and ready for your trip.</p>
+                                <p class="notification-time">2 hours ago</p>
+                            </div>
+                            <a href="404.html" style="color:var(--secondary)"><i class="fas fa-times"></i></a>
+                        </div>
+                        <div class="notification-item" style="background:rgba(16,185,129,0.05);border:1px solid rgba(16,185,129,0.1)">
+                            <div class="notification-icon bg-success-soft"><i class="fas fa-check text-success"></i></div>
+                            <div class="notification-content">
+                                <p class="notification-title">Booking confirmed</p>
+                                <p class="notification-desc">Your Dubai City Explorer booking has been confirmed. Have a wonderful trip!</p>
+                                <p class="notification-time" style="color:var(--success)">1 day ago</p>
+                            </div>
+                            <a href="404.html" style="color:var(--secondary)"><i class="fas fa-times"></i></a>
+                        </div>
+                        <div class="notification-item" style="background:rgba(139,92,246,0.05);border:1px solid rgba(139,92,246,0.1)">
+                            <div class="notification-icon" style="background:rgba(139,92,246,0.1)"><i class="fas fa-file-upload" style="color:#8b5cf6"></i></div>
+                            <div class="notification-content">
+                                <p class="notification-title">Travel document available</p>
+                                <p class="notification-desc">Your updated travel itinerary and booking documents are available in Travel Documents.</p>
+                                <p class="notification-time" style="color:#8b5cf6">2 days ago</p>
+                            </div>
+                            <a href="404.html" style="color:var(--secondary)"><i class="fas fa-times"></i></a>
+                        </div>
+                        <div class="notification-item" style="background:rgba(245,158,11,0.05);border:1px solid rgba(245,158,11,0.1)">
+                            <div class="notification-icon bg-warning-soft"><i class="fas fa-clock text-warning"></i></div>
+                            <div class="notification-content">
+                                <p class="notification-title">Airport pickup scheduled</p>
+                                <p class="notification-desc">Your airport pickup for the Kerala Backwater Escape is scheduled for tomorrow at 2 PM.</p>
+                                <p class="notification-time" style="color:var(--warning)">3 days ago</p>
+                            </div>
+                            <a href="404.html" style="color:var(--secondary)"><i class="fas fa-times"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PROFILE SECTION -->
+            <section class="content-section" id="profile">
+                <div class="section-header">
+                    <h1 class="section-title">My Profile</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item active">Profile</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="row g-4">
+                    <div class="col-lg-8">
+                        <div class="content-card">
+                            <div class="card-header-custom"><h5 class="card-title">Personal Information</h5></div>
+                            <div class="card-body-custom">
+                                <div class="d-flex align-items-center gap-4 mb-4">
+                                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&h=100&fit=crop&crop=face" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid #e2e8f0" alt="">
+                                    <a href="404.html" class="btn btn-outline-secondary btn-sm"><i class="fas fa-camera me-2"></i>Change Photo</a>
+                                </div>
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Full Name</label>
+                                        <input type="text" class="form-control-custom" value="Alex Thompson">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control-custom" value="alex.thompson@company.com">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Phone</label>
+                                        <input type="tel" class="form-control-custom" value="+1 (555) 987-6543">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Company</label>
+                                        <input type="text" class="form-control-custom" value="Blake Development Group">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Bio</label>
+                                    <textarea class="form-control-custom" rows="3">Product Manager at Blake Development Group, focused on AI-driven customer experience solutions.</textarea>
+                                </div>
+                            </div>
+                            <div class="card-body-custom" style="border-top:1px solid #e2e8f0">
+                                <div class="d-flex justify-content-end gap-2">
+                                    <a href="404.html" class="btn btn-outline-secondary">Cancel</a>
+                                    <a href="404.html" class="btn btn-primary" style="background:var(--primary);border-color:var(--primary)">Save Changes</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SETTINGS SECTION -->
+            <section class="content-section" id="settings">
+                <div class="section-header">
+                    <h1 class="section-title">Account Settings</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item active">Settings</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="row g-4">
+                    <div class="col-lg-8">
+                        <div class="content-card">
+                            <div class="card-header-custom"><h5 class="card-title">Preferences</h5></div>
+                            <div class="card-body-custom">
+                                <div class="d-flex align-items-center justify-content-between py-3" style="border-bottom:1px solid #f1f5f9">
+                                    <div><p class="fw-bold mb-1" style="font-size:0.875rem">Email Notifications</p><p class="mb-0" style="font-size:0.8rem;color:var(--secondary)">Receive updates about your trips</p></div>
+                                    <div class="toggle-switch on" onclick="this.classList.toggle('on')"></div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between py-3" style="border-bottom:1px solid #f1f5f9">
+                                    <div><p class="fw-bold mb-1" style="font-size:0.875rem">SMS Alerts</p><p class="mb-0" style="font-size:0.8rem;color:var(--secondary)">Get text alerts for urgent updates</p></div>
+                                    <div class="toggle-switch" onclick="this.classList.toggle('on')"></div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between py-3" style="border-bottom:1px solid #f1f5f9">
+                                    <div><p class="fw-bold mb-1" style="font-size:0.875rem">Weekly Digest</p><p class="mb-0" style="font-size:0.8rem;color:var(--secondary)">Receive weekly trip summary</p></div>
+                                    <div class="toggle-switch on" onclick="this.classList.toggle('on')"></div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between py-3">
+                                    <div><p class="fw-bold mb-1" style="font-size:0.875rem">Two-Factor Authentication</p><p class="mb-0" style="font-size:0.8rem;color:var(--secondary)">Secure your account with 2FA</p></div>
+                                    <div class="toggle-switch" onclick="this.classList.toggle('on')"></div>
+                                </div>
+                            </div>
+                            <div class="card-body-custom" style="border-top:1px solid #e2e8f0">
+                                <div class="d-flex justify-content-end gap-2">
+                                    <a href="404.html" class="btn btn-outline-secondary">Cancel</a>
+                                    <a href="404.html" class="btn btn-primary" style="background:var(--primary);border-color:var(--primary)">Save Changes</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="main-footer">
+            <p>&copy; 2026 STACKLY Tours & Travels. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            document.querySelectorAll('.menu-link').forEach(l => l.classList.remove('active'));
+            document.getElementById('nav-' + sectionId).classList.add('active');
+
+            const titles = {
+                'dashboard': 'My Travel Dashboard',
+                'mytrips': 'My Trips',
+                'requests': 'My Bookings',
+                'services': 'Tours & Travel Services',
+                'documents': 'Travel Documents',
+                'messages': 'Messages',
+                'notifications': 'Notifications',
+                'profile': 'My Profile',
+                'settings': 'Account Settings'
+            };
+            document.getElementById('pageTitle').textContent = titles[sectionId] || 'Dashboard';
+
+            if (window.innerWidth < 992) {
+                document.getElementById('sidebar').classList.remove('show');
+                document.getElementById('mobileOverlay').classList.remove('show');
+            }
+
+            if (sectionId === 'dashboard') initUserCharts();
+        }
+
+        document.getElementById('hamburgerMenu').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.add('show');
+            document.getElementById('mobileOverlay').classList.add('show');
+        });
+
+        document.getElementById('sidebarClose').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.remove('show');
+            document.getElementById('mobileOverlay').classList.remove('show');
+        });
+
+        document.getElementById('mobileOverlay').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.remove('show');
+            this.classList.remove('show');
+        });
+
+        let sidebarCollapsed = false;
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            sidebarCollapsed = !sidebarCollapsed;
+            document.getElementById('sidebar').classList.toggle('collapsed', sidebarCollapsed);
+            document.getElementById('mainWrapper').classList.toggle('sidebar-collapsed', sidebarCollapsed);
+        });
+
+        function initUserCharts() {
+            const pc = document.getElementById('userTripChart');
+            if (pc && !pc.chart) {
+                pc.chart = new Chart(pc, {
+                    type: 'line',
+                    data: {
+                        labels: ['Planning', 'Booking', 'Preparation', 'Travel'],
+                        datasets: [{
+                            label: 'Trip Progress %',
+                            data: [25, 45, 60, 80],
+                            borderColor: '#6366f1',
+                            backgroundColor: 'rgba(99,102,241,0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 4
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } } }
+                });
+            }
+            const sc = document.getElementById('userServiceChart');
+            if (sc && !sc.chart) {
+                sc.chart = new Chart(sc, {
+                    type: 'doughnut',
+                    data: { labels: ['Domestic Tours', 'International Tours', 'Adventure Trips'], datasets: [{ data: [45, 30, 25], backgroundColor: ['#6366f1', '#8b5cf6', '#10b981'], borderWidth: 0 }] },
+                    options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { display: false } } }
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() { initUserCharts(); });
+        const email = localStorage.getItem("loggedInEmail");
+
+if (email) {
+    document.getElementById("welcomeUser").innerHTML =
+        "Welcome, " + email;
+}
+    </script>
+</body>
+</html>
